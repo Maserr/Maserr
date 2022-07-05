@@ -2,7 +2,7 @@
 
 - 🔭 I’m currently working on shhh it's a surprise
 - 🌱 I’m currently learning React ⚛️
-- 👯 I’m looking to collaborate on Gihub
+- 👯 I’m looking to collaborate on Github
 - 💬 Ask me about any tech related stuff.
 - ⚡ Fun fact: I got the MAMBA Mentality 🐍
 
