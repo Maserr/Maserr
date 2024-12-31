@@ -1,4 +1,4 @@
-### Hi, I'm Abdullahi Yosef 👋
+### Hi, I'm Maser 👋
 
 - 🔭 I’m currently working on shhh it's a surprise
 - 🌱 I’m currently learning React ⚛️
