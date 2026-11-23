@@ -1,0 +1,101 @@
+# README cards, see https://github.com/pedrocatalao/github-cool-readme
+name: Update README cards
+
+on:
+  schedule:
+    - cron: '17 4 * * *'   # daily, 04:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actio# README cards, see https://github.com/pedrocatalao/github-cool-readme
+name: Update README cards
+
+on:
+  schedule:
+    - cron: '17 4 * * *'   # daily, 04:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      # Pinned to the commit behind the v1 tag, so the code that sees CARDS_TOKEN
+      # only changes when this file does.
+      - name: Classic cards
+        uses: pedrocatalao/github-cool-readme@909e532bf5d2847b26d156b91c0d086e6e7781ae # v1
+        with:
+          token: ${{ secrets.CARDS_TOKEN }}
+          config: cool-readme.yml
+          output: ${{ runner.temp }}/cards
+      - name: Dot matrix cards
+        uses: pedrocatalao/github-cool-readme@909e532bf5d2847b26d156b91c0d086e6e7781ae # v1
+        with:
+          token: ${{ secrets.CARDS_TOKEN }}
+          config: cool-readme-display.yml
+          output: ${{ runner.temp }}/display
+      # The cards live on their own branch, as a single commit replaced on each change, so they
+      # don't add to the history of the main branch.
+      - name: Publish the cards on the cards branch
+        run: |
+          for f in "$RUNNER_TEMP"/display/*.svg; do
+            [ -e "$f" ] && cp "$f" "$RUNNER_TEMP/cards/display-$(basename "$f")"
+          done
+          if ! ls "$RUNNER_TEMP"/cards/*.svg >/dev/null 2>&1; then echo "No cards"; exit 0; fi
+          git fetch --quiet --depth 1 origin cards:refs/remotes/origin/cards 2>/dev/null || true # not there on the first run
+          git switch --quiet --orphan cards
+          cp "$RUNNER_TEMP"/cards/*.svg .
+          git add -- *.svg
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit --quiet -m 'Update README cards'
+          if git rev-parse --quiet --verify origin/cards >/dev/null && git diff --quiet origin/cards HEAD; then
+            echo "No changes"
+            exit 0
+          fi
+          git push --force origin cardsns/checkout@v7
+      # Pinned to the commit behind the v1 tag, so the code that sees CARDS_TOKEN
+      # only changes when this file does.
+      - name: Classic cards
+        uses: pedrocatalao/github-cool-readme@909e532bf5d2847b26d156b91c0d086e6e7781ae # v1
+        with:
+          token: ${{ secrets.CARDS_TOKEN }}
+          config: cool-readme.yml
+          output: ${{ runner.temp }}/cards
+      - name: Dot matrix cards
+        uses: pedrocatalao/github-cool-readme@909e532bf5d2847b26d156b91c0d086e6e7781ae # v1
+        with:
+          token: ${{ secrets.CARDS_TOKEN }}
+          config: cool-readme-display.yml
+          output: ${{ runner.temp }}/display
+      # The cards live on their own branch, as a single commit replaced on each change, so they
+      # don't add to the history of the main branch.
+      - name: Publish the cards on the cards branch
+        run: |
+          for f in "$RUNNER_TEMP"/display/*.svg; do
+            [ -e "$f" ] && cp "$f" "$RUNNER_TEMP/cards/display-$(basename "$f")"
+          done
+          if ! ls "$RUNNER_TEMP"/cards/*.svg >/dev/null 2>&1; then echo "No cards"; exit 0; fi
+          git fetch --quiet --depth 1 origin cards:refs/remotes/origin/cards 2>/dev/null || true # not there on the first run
+          git switch --quiet --orphan cards
+          cp "$RUNNER_TEMP"/cards/*.svg .
+          git add -- *.svg
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit --quiet -m 'Update README cards'
+          if git rev-parse --quiet --verify origin/cards >/dev/null && git diff --quiet origin/cards HEAD; then
+            echo "No changes"
+            exit 0
+          fi
+          git push --force origin cards
