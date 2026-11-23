@@ -1,0 +1,8 @@
+# Settings: https://github.com/pedrocatalao/github-cool-readme#settings
+# Classic cards (second and third rows of the README)
+show: [summary, languages, contributions, streaks]
+count:
+  private: true
+  orgs: true
+look:
+  style: classic

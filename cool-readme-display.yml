@@ -1,0 +1,12 @@
+# Settings: https://github.com/pedrocatalao/github-cool-readme#settings
+# Dot matrix cards (top row of the README), published as display-*.svg
+show: [summary, languages]
+count:
+  private: true
+  orgs: true
+look:
+  style: floating
+  color: github
+cards:
+  summary:
+    ring: github
